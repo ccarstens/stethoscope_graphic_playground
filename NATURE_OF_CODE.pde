@@ -22,13 +22,12 @@ void setup(){
     ymin =  0;
     ymax =  height;
     zmin =  -1000;
-    zmax =  200;
-    vmin = 1;
-    vmax = 20;
+    zmax =  -200;
+    vmax = 5;
 
 
 
-    balls = new Ball[20];
+    balls = new Ball[500];
 
     for(int i = 0; i < balls.length; i++){
 
@@ -41,7 +40,7 @@ void setup(){
             random(zmin, zmax),
             random(vmin, vmax),
             random(vmin, vmax),
-            random(vmin, vmax)
+            random(vmax * -1, vmax)
         );
 
         // x += 50;
@@ -81,18 +80,24 @@ void draw(){
 void dropLine(){
     pushMatrix();
     translate(0, 0, 0);
-    stroke(0);
-    line(0, 0, 0, 0, 0, -1000);
-    line(0, 0, -1000, width, 0, -1000);
-    line(width, 0, -1000, width, 0, 0);
+    stroke(193, 247, 255);
+    line(xmin, ymin, zmax, xmin, ymin, zmin);
+    line(xmin, ymin, zmin, xmax, ymin, zmin);
+    line(xmax, ymin, zmin, xmax, ymin, zmax);
 
-    line(0, height, 0, 0, height, -1000);
-    line(0, height, -1000, width, height, -1000);
-    line(width, height, -1000, width, height, 0);
+    line(xmin, ymax, zmax, xmin, ymax, zmin);
+    line(xmin, ymax, zmin, xmax, ymax, zmin);
+    line(xmax, ymax, zmin, xmax, ymax, zmax);
 
 
-    line(0, 0, -1000, 0, height, -1000);
-    line(width, 0, -1000, width, height, -1000);
+    line(xmin, ymin, zmin, xmin, ymax, zmin);
+    line(xmax, ymin, zmin, xmax, ymax, zmin);
+
+    line(xmin, ymin, zmax, xmin, ymax, zmax);
+    line(xmax, ymin, zmax, xmax, ymax, zmax);
+
+    line(xmin, ymin, zmax, xmax, ymin, zmax);
+    line(xmin, ymax, zmax, xmax, ymax, zmax);
 
     popMatrix();
 }
