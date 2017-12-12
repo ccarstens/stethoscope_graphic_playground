@@ -5,14 +5,28 @@ int size = 20;
 
 float x, y, z;
 
+// Ball[] balls;
+
+Ball ball, ball2;
+Ball[] balls;
 void setup(){
 
     background(255);
     size(1200, 800, P3D);
+    x = 0;
+    z = 200;
+    balls = new Ball[20];
 
-    x = width / 2;
-    y = height / 2;
-    z = 0;
+    for(int i = 0; i < balls.length; i++){
+        balls[i] = new Ball(x, 0, z, 0, 2, 0);
+
+        x += 50;
+        z -= 50;
+    }
+
+
+    
+    
 }
 
 
@@ -28,17 +42,17 @@ void draw(){
     noStroke();
     fill(0);
 
-    translate(x, y, z);
-
-    ellipse(0, 0, size, size);
-
+    for(Ball b: balls){
+        b.next();
+    }
+    
     
 
 }  
 
 
-void mouseMoved(){
-    z = map(mouseX, 0, width, -500, 600);
-    y = mouseY;
-    println(z);
-}
+// void mouseMoved(){
+//     z = map(mouseX, 0, width, -500, 600);
+//     y = mouseY;
+//     println(z);
+// }
