@@ -3,26 +3,42 @@ PVector velocity;
 
 int size = 20;
 
+float x, y, z;
+
 void setup(){
 
     background(255);
-    size(1200, 800);
+    size(1200, 800, P3D);
 
-    location = new PVector(random(0, width), random(0, height));
-    velocity = new PVector(5, 5);
+    x = width / 2;
+    y = height / 2;
+    z = 0;
 }
 
 
 
 void draw(){
 
-    location.add(velocity);
+    // location.add(velocity);
 
-    if(location.x > width || location.x < 0) velocity.x *= -1;
-    if(location.y > height || location.y < 0) velocity.y *= -1;
+    // if(location.x > width || location.x < 0) velocity.x *= -1;
+    // if(location.y > height || location.y < 0) velocity.y *= -1;
 
+    background(255);
     noStroke();
     fill(0);
-    ellipse(location.x, location.y, size, size);
+
+    translate(x, y, z);
+
+    ellipse(0, 0, size, size);
+
+    
 
 }  
+
+
+void mouseMoved(){
+    z = map(mouseX, 0, width, -500, 600);
+    y = mouseY;
+    println(z);
+}
