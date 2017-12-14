@@ -1,38 +1,44 @@
-PVector location;
-PVector velocity;
-
-Mover m;
-PVector acceleration;
 
 
-PVector mouse;
 
-PVector c, d;
+
+ArrayList<Mover> mlist;
+
+int total = 1000;
+
+
 
 void setup(){
 
     background(255);
-    size(1200, 800);
-    frameRate(25);
+    size(1200, 800, P2D);
+    frameRate(30);
 
 
 
-    m = new Mover();
+    mlist = new ArrayList<Mover>();
     
-
+    for(int i = 0; i < total; i++){
+        Mover m = new Mover();
+        m.setRandomLocation();
+        mlist.add(m);
+    }
     
 }
 
 
 
 void draw(){
-    background(255);
+    background(0);
     dropLine();
 
     // pushMatrix();
     // scale(0.5);
     // translate(width / 2, height / 2);
-    m.next();
+    for(int i = 0; i < mlist.size(); i++){
+        mlist.get(i).next();
+    }
+
     // popMatrix();
 
 

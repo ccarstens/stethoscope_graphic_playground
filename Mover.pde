@@ -16,21 +16,21 @@ class Mover{
         mouse = new PVector(mouseX, mouseY);
         PVector dir = PVector.sub(mouse, location);
         dir.normalize();
-        acceleration = PVector.mult(dir, 0.5);
+        acceleration = PVector.mult(dir, 2);
         velocity.add(acceleration);
         velocity.limit(20);
         location.add(velocity);
     }
 
     void display(){
-        stroke(0);
+        noStroke();
         fill(255, 0, 0);
+        // fill(0);
         // checkEdges();
-        ellipse(location.x, location.y, 20, 20);
+        ellipse(location.x, location.y, 1, 1);
     }
 
-    void 
-    Edges(){
+    void checkEdges(){
         
         if(
             (location.x > width - constraint && acceleration.x > 0) || (location.x < constraint && acceleration.x < 0)
