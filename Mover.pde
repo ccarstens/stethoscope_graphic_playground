@@ -1,6 +1,6 @@
 class Mover{
     PVector location, velocity, acceleration;
-    int constraint = 0;
+    int constraint = 75;
 
     Mover(){
         location = new PVector(width / 2, height / 2);
@@ -17,8 +17,8 @@ class Mover{
     void display(){
         stroke(0);
         fill(75);
-        checkEdges();
-        ellipse(location.x, location.y, 16, 16);
+        // checkEdges();
+        ellipse(location.x, location.y, 2, 2);
     }
 
     void checkEdges(){
