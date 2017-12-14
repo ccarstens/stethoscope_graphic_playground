@@ -1,5 +1,5 @@
 class Mover{
-    PVector location, velocity, acceleration;
+    PVector location, velocity, acceleration, mouse;
     int constraint = 75;
 
     Mover(){
@@ -7,21 +7,30 @@ class Mover{
         velocity = new PVector(0, 0);
     }
 
+    void setRandomLocation(){
+        location = new PVector(random(0, width), random(0, height));
+    }
+
 
     void update(){
+        mouse = new PVector(mouseX, mouseY);
+        PVector dir = PVector.sub(mouse, location);
+        dir.normalize();
+        acceleration = PVector.mult(dir, 0.5);
         velocity.add(acceleration);
-        velocity.limit(5);
+        velocity.limit(20);
         location.add(velocity);
     }
 
     void display(){
         stroke(0);
-        fill(75);
+        fill(255, 0, 0);
         // checkEdges();
-        ellipse(location.x, location.y, 2, 2);
+        ellipse(location.x, location.y, 20, 20);
     }
 
-    void checkEdges(){
+    void 
+    Edges(){
         
         if(
             (location.x > width - constraint && acceleration.x > 0) || (location.x < constraint && acceleration.x < 0)
