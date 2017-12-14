@@ -13,10 +13,10 @@ class Mover{
 
 
     void update(){
-        mouse = new PVector(mouseX, mouseY);
+        setMouse();
         PVector dir = PVector.sub(mouse, location);
         dir.normalize();
-        acceleration = PVector.mult(dir, 2);
+        setAcceleration(dir);
         velocity.add(acceleration);
         velocity.limit(20);
         location.add(velocity);
@@ -50,5 +50,24 @@ class Mover{
     void next(){
         update();
         display();
+    }
+
+    void setAcceleration(PVector direction){
+        acceleration = PVector.mult(direction, 2);
+    }
+
+    void setMouse(){
+        mouse = new PVector(mouseX, mouseY);
+        mouse.mult(6);
+
+        noStroke();
+        fill(255, 0, 0);
+        ellipse(mouse.x, mouse.y, 4, 4);
+    }
+
+    void setRandomAcceleration(){
+        println("random");
+        PVector newDirection = PVector.random2D();
+        setAcceleration(newDirection);
     }
 }
