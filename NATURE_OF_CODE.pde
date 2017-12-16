@@ -4,11 +4,9 @@
 
 ArrayList<Mover> mlist;
 
-int total = 100;
+int total = 4000;
 
-boolean randomSet = false;
-
-boolean attract = true;
+String flag = "MOUSE";
 
 void setup(){
 
@@ -33,11 +31,11 @@ void draw(){
     // pushMatrix();
     // scale(0.5);
     // translate(width / 2, height / 2);
-    if(attract){
-        for(int i = 0; i < mlist.size(); i++){
-            mlist.get(i).next();
-        }
+    
+    for(int i = 0; i < mlist.size(); i++){
+        mlist.get(i).render(flag);
     }
+    
 
 
     // popMatrix();
@@ -75,15 +73,7 @@ void addMovers(int count){
     }
 }
 
-void setRandomAcceleration(){
-    if(!randomSet && !attract){
-        for(int i = 0; i < mlist.size(); i++){
-            mlist.get(i).setRandomAcceleration();
-        }
-        randomSet = true;
-    }
 
-}
 
 
 
@@ -94,19 +84,18 @@ void mousePressed(){
 }
 
 void keyPressed(){
-    attract = false;
+    
     if(key == CODED){
         if(keyCode == UP){
 
-            setRandomAcceleration();
+            flag = "RANDOM";
 
         }
     }
 }
 
 void keyReleased(){
-    randomSet = false;
-    attract = true;
+    flag = "MOUSE";
 }
 
 

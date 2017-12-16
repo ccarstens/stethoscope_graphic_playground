@@ -1,10 +1,16 @@
 class Mover{
-    PVector location, velocity, acceleration, mouse;
+    PVector location, velocity, acceleration, mouse, direction;
     int constraint = 75;
+    float accelerationAmount = 1.2;
+    float speedLimit = 25;
+
+    boolean isRandom = false;
+    color c;
 
     Mover(){
         location = new PVector(width / 2, height / 2);
         velocity = new PVector(0, 0);
+        c = color(random(255), random(255), random(255));
     }
 
     void setRandomLocation(){
@@ -12,13 +18,26 @@ class Mover{
     }
 
 
-    void update(){
+    void updateWithMouse(){
+        if(isRandom) isRandom = false;
         setMouse();
-        PVector dir = PVector.sub(mouse, location);
-        dir.normalize();
-        setAcceleration(dir);
+        direction = PVector.sub(mouse, location);
+        direction.normalize();
+        setAcceleration();
         velocity.add(acceleration);
-        velocity.limit(25);
+        velocity.limit(speedLimit);
+        location.add(velocity);
+    }
+
+    void updateWithRandom(){
+        if(!isRandom) {
+            isRandom = true;
+            setRandomDirection();
+        }
+
+        setAcceleration();
+        velocity.add(acceleration);
+        velocity.limit(speedLimit);
         location.add(velocity);
     }
 
@@ -26,7 +45,7 @@ class Mover{
 
     void display(){
         noStroke();
-        fill(255, 0, 0);
+        fill(c);
         // fill(0);
         // checkEdges();
         ellipse(location.x, location.y, 1, 1);
@@ -49,13 +68,15 @@ class Mover{
         }
     }
 
-    void next(){
-        update();
+    void render(String method){
+        if(method == "MOUSE") updateWithMouse();
+        else if(method == "RANDOM") updateWithRandom();
+        
         display();
     }
 
-    void setAcceleration(PVector direction){
-        acceleration = PVector.mult(direction, 1.5);
+    void setAcceleration(){
+        acceleration = PVector.mult(direction, accelerationAmount);
     }
 
     void setMouse(){
@@ -67,9 +88,9 @@ class Mover{
         ellipse(mouse.x, mouse.y, 4, 4);
     }
 
-    void setRandomAcceleration(){
+    void setRandomDirection(){
         println("random");
-        PVector newDirection = PVector.random2D();
-        setAcceleration(newDirection);
+        direction = PVector.random2D();
+        
     }
 }
