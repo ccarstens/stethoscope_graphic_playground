@@ -1,5 +1,12 @@
 
+int total = 12;
 
+float radius = 200;
+
+float value;
+
+ArrayList<Entity> list;
+Attractor attractor;
 
 void setup(){
 
@@ -7,17 +14,41 @@ void setup(){
     size(1500, 1000, P2D);
     frameRate(30);
 
+    translate(width / 2, height / 2);
+
+    list = new ArrayList<Entity>();
+
+    for(int i = 0; i < total; i++){
+        float p = TWO_PI / total * (i +1);
+        float x = radius * cos(p);
+        float y = radius * sin(p);
+        list.add(new Entity(x, y));
+    }
+    attractor = new Attractor(0, 0, 10);
     
 }
 
 
-
 void draw(){
     background(255);
-    dropLine();
+    // dropLine();
+    translate(width / 2, height / 2);
+    attractor.display();
+    for(int i = 0; i < list.size(); i++){
+        list.get(i).display();
+    }
 
+    
 
 }  
+
+
+
+
+
+void mouseMoved(){
+    value = map(mouseY, height, 200, 0, 1);
+}
 
 
 
