@@ -3,6 +3,7 @@ class Mover{
     int constraint = 75;
     float accelerationAmount = 1.2;
     float speedLimit = 25;
+    int size = 2;
 
     boolean isRandom = false;
     color c;
@@ -45,10 +46,23 @@ class Mover{
 
     void display(){
         noStroke();
-        fill(c);
+        // fill(c);
         // fill(0);
         // checkEdges();
-        ellipse(location.x, location.y, 1, 1);
+
+        pushMatrix();
+        translate(location.x, location.y);
+
+        fill(255, 0, 0);
+        rect(0, 0, size, size);
+
+        fill(0, 255, 0);
+        rect(1, 1, size, size);
+
+        fill(0, 0, 255);
+        rect(2, 2, size, size);
+        popMatrix();
+        
     }
 
     void checkEdges(){
