@@ -4,9 +4,11 @@
 
 ArrayList<Mover> mlist;
 
-int total = 4000;
+int total = 1;
 
 String flag = "MOUSE";
+
+PVector gravity;
 
 void setup(){
 
@@ -19,6 +21,9 @@ void setup(){
     mlist = new ArrayList<Mover>();
     
     addMovers(total);
+    gravity = new PVector(0, 1);
+    gravity.normalize();
+    gravity.mult(0.06);
     
 }
 
@@ -33,7 +38,7 @@ void draw(){
     // translate(width / 2, height / 2);
     
     for(int i = 0; i < mlist.size(); i++){
-        mlist.get(i).render(flag);
+        mlist.get(i).render(flag, gravity);
     }
     
 
