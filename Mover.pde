@@ -18,9 +18,11 @@ class Mover{
         dir.normalize();
         setAcceleration(dir);
         velocity.add(acceleration);
-        velocity.limit(20);
+        velocity.limit(25);
         location.add(velocity);
     }
+
+
 
     void display(){
         noStroke();
@@ -53,7 +55,7 @@ class Mover{
     }
 
     void setAcceleration(PVector direction){
-        acceleration = PVector.mult(direction, 2);
+        acceleration = PVector.mult(direction, 1.5);
     }
 
     void setMouse(){
