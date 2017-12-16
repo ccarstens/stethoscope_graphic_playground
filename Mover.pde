@@ -3,7 +3,7 @@ class Mover{
     int constraint = 75;
     float accelerationAmount = 1.2;
     float speedLimit = 25;
-    int size = 2;
+    int size = 3;
 
     boolean isRandom = false;
     color c;
@@ -50,18 +50,7 @@ class Mover{
         // fill(0);
         // checkEdges();
 
-        pushMatrix();
-        translate(location.x, location.y);
-
-        fill(255, 0, 0);
-        rect(0, 0, size, size);
-
-        fill(0, 255, 0);
-        rect(1, 1, size, size);
-
-        fill(0, 0, 255);
-        rect(2, 2, size, size);
-        popMatrix();
+        printPixel(25, 130, 200, size);
         
     }
 
@@ -106,5 +95,22 @@ class Mover{
         println("random");
         direction = PVector.random2D();
         
+    }
+
+    void printPixel(int r, int g, int b, int s){
+        pushMatrix();
+        translate(location.x, location.y);
+
+        float single = s / 3;
+
+        fill(r, 0, 0);
+        rect(0, 0, single, size);
+
+        fill(0, g, 0);
+        rect(single, 0, single, size);
+
+        fill(0, 0, b);
+        rect(single * 2, 0, single, size);
+        popMatrix();
     }
 }
