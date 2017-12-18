@@ -83,6 +83,21 @@ void mousePressed(){
 
 }
 
+void collectMovers(float x, float y){
+    
+    for(Mover m: mlist){
+        m.location.x = x;
+        m.location.y = y;
+    }
+}
+
+void giveRandomLocationAndStop(){
+    for(Mover m: mlist){
+        m.acceleration = m.velocity = m.direction = new PVector(0, 0);
+        m.location = new PVector(random(width), random(height));
+    }
+}
+
 void keyPressed(){
     
     if(key == CODED){
@@ -90,6 +105,14 @@ void keyPressed(){
 
             flag = "RANDOM";
 
+        }else if(keyCode == DOWN){
+            collectMovers(mouseX * 6, mouseY * 6);
+        }else if(keyCode == LEFT){
+            float x = mlist.get(0).location.x;
+            float y = mlist.get(0).location.y;
+            collectMovers(x, y);
+        }else if(keyCode == RIGHT){
+            giveRandomLocationAndStop();
         }
     }
 }

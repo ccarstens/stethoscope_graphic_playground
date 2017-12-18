@@ -10,7 +10,8 @@ class Mover{
     Mover(){
         location = new PVector(width / 2, height / 2);
         velocity = new PVector(0, 0);
-        c = color(random(255), random(255), random(255));
+        c = color(255, 0, 0);
+        // c = color(random(255), random(255), random(255));
     }
 
     void setRandomLocation(){
