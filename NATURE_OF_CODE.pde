@@ -30,24 +30,28 @@ void setup(){
 
 
 void draw(){
-    background(255);
+    background(0);
     // dropLine();
     translate(width / 2, height / 2);
-    attractor.display();
-    for(int i = 0; i < list.size(); i++){
-        list.get(i).display();
+    
+    for(int i = 0; i < total; i++){
+        float radiusValue = radius * value;
+        float p = TWO_PI / total * (i +1);
+        float x = radiusValue * cos(p);
+        float y = radiusValue * sin(p);
+        stroke(0);
+        fill(255, 0, 0);
+        ellipse(x, y, 20, 20);
     }
 
     
 
-}  
-
-
-
+}
 
 
 void mouseMoved(){
     value = map(mouseY, height, 200, 0, 1);
+    println(value);
 }
 
 
