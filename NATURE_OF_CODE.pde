@@ -57,6 +57,8 @@ int total = 20;
 int startX = 50;
 int startY = 50;
 
+int spacing = 10;
+
 void setup(){
 
     background(255);
@@ -73,7 +75,7 @@ void setup(){
 
     wind = new ConstantForceBehavior2D(new Vec2D(-0.1, 0));
 
-    physics.addBehavior(wind);
+    // physics.addBehavior(wind);
     int x = startX;
     int y = startY;
 
@@ -84,13 +86,13 @@ void setup(){
 
         if(i != 0){
             Particle prev = particles.get(i - 1);
-            VerletSpring2D spring = new VerletSpring2D(prev, tmp, 50, 0.01);
+            VerletSpring2D spring = new VerletSpring2D(prev, tmp, spacing, 0.01);
             physics.addSpring(spring);
             springs.add(spring);
 
         }
 
-        x += 50;
+        x += spacing;
     }
 
     particles.get(0).lock();
@@ -100,6 +102,7 @@ void setup(){
 void draw(){
     background(0);
     // dropLine();
+    bindLast();
     physics.update();
     
     
@@ -111,10 +114,20 @@ void draw(){
 
 }
 
+void bindLast(){
+    Particle p = particles.get(particles.size() - 1);
+    p.lock();
+    p.x = mouseX;
+    p.y = mouseY;
+    p.unlock();
+}
+
 
 
 void mouseMoved(){
     float x = map(mouseX, 0, width, 1, -1);
     float y = map(mouseY, 0, height, 1, -1);
     wind.setForce(new Vec2D(x, y));
+
+
 }
