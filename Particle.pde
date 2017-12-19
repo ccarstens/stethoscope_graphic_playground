@@ -8,6 +8,6 @@ class Particle extends VerletParticle2D{
         fill(255);
         noStroke();
 
-        ellipse(x, y, 3, 3);
+        ellipse(x, y, 6, 6);
     }
 }

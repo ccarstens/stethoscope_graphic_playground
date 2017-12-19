@@ -53,6 +53,8 @@ ConstantForceBehavior2D wind;
 ArrayList<Particle> particles;
 ArrayList<VerletSpring2D> springs;
 
+
+
 int total = 20;
 int startX = 50;
 int startY = 50;
@@ -95,19 +97,26 @@ void setup(){
         x += spacing;
     }
 
-    particles.get(0).lock();
+    particles.get(1).lock();
 }
 
 
 void draw(){
     background(0);
     // dropLine();
-    bindLast();
+    
     physics.update();
-    
-    
+    bindLast();
+    noFill();
+    stroke(255);
+    beginShape();
     for(Particle p: particles){
-        p.display();
+        curveVertex(p.x, p.y);
+    }
+    endShape();
+
+    for(Particle p: particles){
+        // p.display();
     }
 
     
@@ -115,7 +124,7 @@ void draw(){
 }
 
 void bindLast(){
-    Particle p = particles.get(particles.size() - 1);
+    Particle p = particles.get(particles.size() - 2);
     p.lock();
     p.x = mouseX;
     p.y = mouseY;
