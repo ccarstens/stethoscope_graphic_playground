@@ -6,6 +6,7 @@ class Mover{
 
     boolean isRandom = false;
     color c;
+    int size = 3;
 
     Mover(){
         location = new PVector(width / 2, height / 2);
@@ -49,7 +50,24 @@ class Mover{
         fill(c);
         // fill(0);
         // checkEdges();
-        ellipse(location.x, location.y, 1, 1);
+        printPixel(255, 0, 0, size);
+    }
+
+    void printPixel(int r, int g, int b, int s){
+        pushMatrix();
+        translate(location.x, location.y);
+
+        float single = s / 3;
+
+        fill(r, 0, 0);
+        rect(0, 0, single, size);
+
+        fill(0, g, 0);
+        rect(single, 0, single, size);
+
+        fill(0, 0, b);
+        rect(single * 2, 0, single, size);
+        popMatrix();
     }
 
     void checkEdges(){
