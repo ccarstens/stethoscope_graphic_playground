@@ -50,6 +50,12 @@ Particle p;
 
 ConstantForceBehavior2D wind;
 
+ArrayList<Particle> particles;
+
+int total = 20;
+int startX = 50;
+int startY = 50;
+
 void setup(){
 
     background(255);
@@ -57,6 +63,7 @@ void setup(){
     frameRate(30);
 
     // GravityBehavior2D gb = new GravityBehavior2D(new Vec2D(0, 0.5));
+    particles = new ArrayList<Particle>();
 
     physics = new VerletPhysics2D();
     physics.setWorldBounds(new Rect(0, 0, width, height));
@@ -65,9 +72,15 @@ void setup(){
     wind = new ConstantForceBehavior2D(new Vec2D(-0.1, 0));
 
     physics.addBehavior(wind);
+    int x = startX;
+    int y = startY;
 
-    p = new Particle(new Vec2D(width/ 2, height / 2));
-    physics.addParticle(p);
+    for(int i = 0; i < total; i++){
+        Particle tmp = new Particle(new Vec2D(x, y));
+        particles.add(tmp);
+        physics.addParticle(tmp);
+        x += 50;
+    }
 }
 
 
@@ -77,7 +90,9 @@ void draw(){
     physics.update();
     
     
-    p.display();
+    for(Particle p: particles){
+        p.display();
+    }
 
     
 
