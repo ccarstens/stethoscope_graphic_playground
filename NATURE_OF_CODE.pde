@@ -51,6 +51,7 @@ Particle p;
 ConstantForceBehavior2D wind;
 
 ArrayList<Particle> particles;
+ArrayList<VerletSpring2D> springs;
 
 int total = 20;
 int startX = 50;
@@ -64,6 +65,7 @@ void setup(){
 
     // GravityBehavior2D gb = new GravityBehavior2D(new Vec2D(0, 0.5));
     particles = new ArrayList<Particle>();
+    springs = new ArrayList<VerletSpring2D>();
 
     physics = new VerletPhysics2D();
     physics.setWorldBounds(new Rect(0, 0, width, height));
@@ -79,8 +81,19 @@ void setup(){
         Particle tmp = new Particle(new Vec2D(x, y));
         particles.add(tmp);
         physics.addParticle(tmp);
+
+        if(i != 0){
+            Particle prev = particles.get(i - 1);
+            VerletSpring2D spring = new VerletSpring2D(prev, tmp, 50, 0.01);
+            physics.addSpring(spring);
+            springs.add(spring);
+
+        }
+
         x += 50;
     }
+
+    particles.get(0).lock();
 }
 
 
