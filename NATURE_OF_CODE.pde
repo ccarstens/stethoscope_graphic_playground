@@ -55,7 +55,7 @@ ArrayList<VerletSpring2D> springs;
 
 
 
-int total = 20;
+int total = 10;
 int startX = 50;
 int startY = 50;
 
@@ -73,7 +73,7 @@ void setup(){
 
     physics = new VerletPhysics2D();
     physics.setWorldBounds(new Rect(0, 0, width, height));
-    physics.addBehavior(new GravityBehavior2D(new Vec2D(0, 0.5)));
+    physics.addBehavior(new GravityBehavior2D(new Vec2D(0, 0.1)));
 
     wind = new ConstantForceBehavior2D(new Vec2D(-0.1, 0));
 
@@ -109,6 +109,8 @@ void draw(){
     bindLast();
     noFill();
     stroke(255);
+    strokeWeight(70);
+    strokeCap(SQUARE);
     beginShape();
     for(Particle p: particles){
         curveVertex(p.x, p.y);
