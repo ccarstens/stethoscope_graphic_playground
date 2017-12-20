@@ -54,16 +54,27 @@ ArrayList<Particle> particles;
 ArrayList<VerletSpring2D> springs;
 
 
+ArrayList<ArrayList<Particle>> grid;
+
+int sizeX = 20;
+int sizeY = 20;
+
 
 int total = 10;
-int startX = 50;
+int startX = 200;
 int startY = 50;
 
-int spacing = 10;
+int spacing = 20;
 
 float gb = 0;
 float colorStep;
 int colorFadeDuration = 1;
+
+float strength = 0.1;
+
+PImage img;
+
+float imgWidthStep, imgHeightStep;
 
 void setup(){
 
@@ -72,39 +83,77 @@ void setup(){
     frameRate(30);
 
     // GravityBehavior2D gb = new GravityBehavior2D(new Vec2D(0, 0.5));
-    particles = new ArrayList<Particle>();
+    grid = new ArrayList<ArrayList<Particle>>();
     springs = new ArrayList<VerletSpring2D>();
 
     physics = new VerletPhysics2D();
     physics.setWorldBounds(new Rect(0, 0, width, height));
-    physics.addBehavior(new GravityBehavior2D(new Vec2D(-5, 0)));
+    physics.addBehavior(new GravityBehavior2D(new Vec2D(0, 1)));
 
-    wind = new ConstantForceBehavior2D(new Vec2D(-0.1, 0));
+    wind = new ConstantForceBehavior2D(new Vec2D(-0.1, 0.1));
 
 
-    colorStep = 255 / (frameRate * colorFadeDuration);
+    
 
     // physics.addBehavior(wind);
     int x = startX;
     int y = startY;
 
-    for(int i = 0; i < total; i++){
-        Particle tmp = new Particle(new Vec2D(x, y));
-        particles.add(tmp);
-        physics.addParticle(tmp);
+    for(int i = 0; i < sizeY; i++){
+        ArrayList<Particle> tmpList = new ArrayList<Particle>();
+        x = startX;
+        for(int ii = 0; ii < sizeX; ii++){
+            Particle tmpParticle = new Particle(new Vec2D(x, y));
+            physics.addParticle(tmpParticle);
+            tmpList.add(tmpParticle);
+            x += spacing;
 
-        if(i != 0){
-            Particle prev = particles.get(i - 1);
-            VerletSpring2D spring = new VerletSpring2D(prev, tmp, spacing, 0.01);
-            physics.addSpring(spring);
-            springs.add(spring);
+            if(i != 0){
+                Particle prevRowParticle = grid.get(i - 1).get(ii);
+                VerletSpring2D tmpSpring = new VerletSpring2D(prevRowParticle, tmpParticle, spacing, strength);
+                springs.add(tmpSpring);
+                physics.addSpring(tmpSpring);
+            }
 
+            if(ii != 0){
+                Particle prev = tmpList.get(ii - 1);
+                VerletSpring2D tmpSpring = new VerletSpring2D(prev, tmpParticle, spacing, strength);
+                springs.add(tmpSpring);
+                physics.addSpring(tmpSpring);
+            }
         }
 
-        x += spacing;
+        grid.add(tmpList);
+        y += spacing;
     }
 
-    // particles.get(1).lock();
+
+    grid.get(0).get(0).lock();
+    grid.get(0).get(grid.get(0).size() - 1).lock();
+
+
+    img = loadImage("receipt.png");
+
+    imgWidthStep = img.width / sizeX;
+    imgHeightStep = img.height / sizeY;
+
+    
+}
+
+void setTopRight(int x, int y){
+
+    Particle bottomLeft = grid.get(sizeY - 1).get(0);
+    Particle bottomRight = grid.get(sizeY - 1).get(sizeX - 1);
+    bottomLeft.lock();
+    bottomRight.lock();
+
+
+    Particle topRight = grid.get(0).get(sizeX - 1);
+    topRight.x = x;
+    topRight.y = y;
+
+    bottomLeft.unlock();
+    bottomRight.unlock();
 }
 
 
@@ -113,56 +162,54 @@ void draw(){
     // dropLine();
     
     physics.update();
-    bindLast();
+
+
+    // for(ArrayList<Particle> plist: grid){
+    //     for(Particle p: plist){
+    //         p.display();
+    //     }
+    // }
+
+
+    // Particle bottomRight = grid.get(sizeY - 1).get(sizeX - 1);
+    // bottomRight.lock();
+    // bottomRight.x = mouseX;
+    // bottomRight.y = mouseY;
+    // bottomRight.unlock();
+
+    // stroke(255);
+    noStroke();
     noFill();
-    stroke(255, gb, gb);
-    
-    strokeWeight(100);
-    strokeCap(PROJECT);
+
     beginShape();
-    for(Particle p: particles){
-        curveVertex(p.x, p.y);
-    }
-    endShape();
+    texture(img);
 
-    for(Particle p: particles){
-        // p.display();
+    for(int i = 0; i < sizeX; i++){
+        Particle ptop = grid.get(0).get(i);
+        vertex(ptop.x, ptop.y, imgWidthStep * i, 0);
     }
 
-
-    if(gb > 255 || gb < 0){
-        colorStep *= -1;
+    for(int i = 0; i < sizeY; i++){
+        Particle pright = grid.get(i).get(sizeX - 1);
+        vertex(pright.x, pright.y, img.width, imgHeightStep * i);
     }
 
-    // gb += colorStep;
-    println(gb);
+    for(int i = sizeX - 1; i >= 0; i--){
+        Particle pbottom = grid.get(sizeY - 1).get(i);
+        vertex(pbottom.x, pbottom.y, imgWidthStep * i, img.height);
+    }
+    for(int i = sizeY - 1; i >= 0; i--){
+        Particle pleft = grid.get(i).get(0);
+        vertex(pleft.x, pleft.y, 0, imgHeightStep * i);
+    }
+
+    endShape(CLOSE);
 
     
-
-}
-
-void bindLast(){
-    Particle p = particles.get(particles.size() - 2);
-    p.lock();
-    p.x = mouseX;
-    p.y = mouseY;
-    p.unlock();
-}
-
-
-
-void mouseMoved(){
-    float x = map(mouseX, 0, width, 1, -1);
-    float y = map(mouseY, 0, height, 1, -1);
-    wind.setForce(new Vec2D(x, y));
-
 
 }
 
 void mousePressed(){
-    Particle p = particles.get(1);
-    // p.unlock();
-    p.x = mouseX;
-    p.y = mouseY;
-    // p.lock();
+    setTopRight(mouseX, mouseY);
 }
+
