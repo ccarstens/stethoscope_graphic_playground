@@ -56,31 +56,35 @@ ArrayList<VerletSpring2D> springs;
 
 ArrayList<ArrayList<Particle>> grid;
 
-int sizeX = 20;
+int sizeX = 60;
 int sizeY = 20;
 
 
 int total = 10;
-int startX = 200;
+int startX = 400;
 int startY = 50;
 
-int spacing = 20;
+int spacingX = 5;
+int spacingY = 30;
 
 float gb = 0;
 float colorStep;
 int colorFadeDuration = 1;
 
-float strength = 0.6;
+float strength = 1.2;
 
 PImage img;
 
 float imgWidthStep, imgHeightStep;
 
 
-float windMax = 1;
+float windMax = 20;
+float windMin = 1;
 float windStrength;
 
 ArrayList<Particle> corners;
+
+ArrayList<Particle> firstColumn;
 
 void setup(){
 
@@ -93,7 +97,7 @@ void setup(){
     springs = new ArrayList<VerletSpring2D>();
 
     physics = new VerletPhysics2D();
-    physics.setWorldBounds(new Rect(0, 0, width, height));
+    // physics.setWorldBounds(new Rect(0, 0, width, height));
     physics.addBehavior(new GravityBehavior2D(new Vec2D(0, 1)));
 
     wind = new ConstantForceBehavior2D(new Vec2D(0, 0));
@@ -112,30 +116,29 @@ void setup(){
             Particle tmpParticle = new Particle(new Vec2D(x, y));
             physics.addParticle(tmpParticle);
             tmpList.add(tmpParticle);
-            x += spacing;
+            x += spacingX;
 
             if(i != 0){
                 Particle prevRowParticle = grid.get(i - 1).get(ii);
-                VerletSpring2D tmpSpring = new VerletSpring2D(prevRowParticle, tmpParticle, spacing, strength);
+                VerletSpring2D tmpSpring = new VerletSpring2D(prevRowParticle, tmpParticle, spacingY, strength);
                 springs.add(tmpSpring);
                 physics.addSpring(tmpSpring);
             }
 
             if(ii != 0){
                 Particle prev = tmpList.get(ii - 1);
-                VerletSpring2D tmpSpring = new VerletSpring2D(prev, tmpParticle, spacing, strength);
+                VerletSpring2D tmpSpring = new VerletSpring2D(prev, tmpParticle, spacingX, strength);
                 springs.add(tmpSpring);
                 physics.addSpring(tmpSpring);
             }
         }
 
         grid.add(tmpList);
-        y += spacing;
+        y += spacingY;
     }
 
 
-    grid.get(0).get(0).lock();
-    grid.get(0).get(grid.get(0).size() - 1).lock();
+    
 
 
     img = loadImage("receipt.png");
@@ -149,6 +152,12 @@ void setup(){
     corners.add(grid.get(sizeY - 1).get(0));
     corners.add(grid.get(sizeY - 1).get(sizeX - 1));
     for(Particle p: corners){
+        // p.lock();
+    }
+
+    firstColumn = getVerticalSlice(0);
+
+    for(Particle p: firstColumn){
         p.lock();
     }
     
@@ -170,11 +179,7 @@ void draw(){
     physics.update();
 
 
-    // for(ArrayList<Particle> plist: grid){
-    //     for(Particle p: plist){
-    //         p.display();
-    //     }
-    // }
+
 
 
     // Particle bottomRight = grid.get(sizeY - 1).get(sizeX - 1);
@@ -214,18 +219,24 @@ void draw(){
     for(Particle p: corners){
         noStroke();
         fill(255);
-        p.display();
+        // p.display();
+    }
+
+    for(ArrayList<Particle> plist: grid){
+        for(Particle p: plist){
+            // p.display(255, 0, 0);
+        }
     }
 
 }
 
 void mousePressed(){
-    setCorner(getClosest(), mouseX, mouseY);
+    // setCorner(getClosest(), mouseX, mouseY);
 }
 
 
 void mouseMoved(){
-    windStrength = map(mouseY, height, 0, 0, windMax);
+    windStrength = map(mouseY, height, 0, windMin, windMax);
     if(mouseX > width / 2){
         windStrength *= -1;
     }
@@ -250,4 +261,12 @@ Particle getClosest(){
         i++;
     }
     return corners.get(smallest);
+}
+
+ArrayList<Particle> getVerticalSlice(int i){
+    ArrayList<Particle> list = new ArrayList<Particle>();
+    for(ArrayList<Particle> pl: grid){
+        list.add(pl.get(i));
+    }
+    return list;
 }
