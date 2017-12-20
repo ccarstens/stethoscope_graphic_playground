@@ -117,8 +117,8 @@ void draw(){
     noFill();
     stroke(255, gb, gb);
     
-    strokeWeight(70);
-    strokeCap(SQUARE);
+    strokeWeight(100);
+    strokeCap(PROJECT);
     beginShape();
     for(Particle p: particles){
         curveVertex(p.x, p.y);
