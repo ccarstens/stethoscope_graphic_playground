@@ -64,27 +64,33 @@ int total = 10;
 int startX = 400;
 int startY = 50;
 
-int spacingX = 3;
-int spacingY = 30;
+int spacingX = 2;
+int spacingY = 25;
 
 float gb = 0;
 float colorStep;
 int colorFadeDuration = 1;
 
-float strength = 1.7;
+float maxSpringStrengthX = 1.7;
+float maxSpringStrengthY = 1.7;
 
 PImage img;
 
 float imgWidthStep, imgHeightStep;
 
 
-float windMax = 20;
-float windMin = 1;
+float windMax = 3;
+float windMin = 0.5;
 float windStrength;
+
+float maxWeight = 10;
+float minWeight = 1;
 
 ArrayList<Particle> corners;
 
 ArrayList<Particle> firstColumn;
+
+boolean DRAWGRID = false;
 
 void setup(){
 
@@ -98,7 +104,7 @@ void setup(){
 
     physics = new VerletPhysics2D();
     // physics.setWorldBounds(new Rect(0, 0, width, height));
-    physics.addBehavior(new GravityBehavior2D(new Vec2D(0, 1)));
+    physics.addBehavior(new GravityBehavior2D(new Vec2D(0, 0.25)));
 
     wind = new ConstantForceBehavior2D(new Vec2D(0, 0));
 
@@ -112,24 +118,32 @@ void setup(){
     for(int i = 0; i < sizeY; i++){
         ArrayList<Particle> tmpList = new ArrayList<Particle>();
         x = startX;
+
+        float strenghStep = maxSpringStrengthX / sizeX / 4;
+        float strength = maxSpringStrengthX;
+
         for(int ii = 0; ii < sizeX; ii++){
             Particle tmpParticle = new Particle(new Vec2D(x, y));
+            tmpParticle.setWeight(map(ii, 0, sizeX, maxWeight, minWeight));
             physics.addParticle(tmpParticle);
             tmpList.add(tmpParticle);
             x += spacingX;
 
             if(i != 0){
                 Particle prevRowParticle = grid.get(i - 1).get(ii);
-                VerletSpring2D tmpSpring = new VerletSpring2D(prevRowParticle, tmpParticle, spacingY, strength);
+                VerletSpring2D tmpSpring = new VerletSpring2D(prevRowParticle, tmpParticle, spacingY, maxSpringStrengthY);
                 springs.add(tmpSpring);
                 physics.addSpring(tmpSpring);
             }
 
             if(ii != 0){
+
                 Particle prev = tmpList.get(ii - 1);
                 VerletSpring2D tmpSpring = new VerletSpring2D(prev, tmpParticle, spacingX, strength);
                 springs.add(tmpSpring);
                 physics.addSpring(tmpSpring);
+                strength -= strenghStep;
+
             }
         }
 
@@ -155,7 +169,7 @@ void setup(){
         // p.lock();
     }
 
-    firstColumn = getVerticalSlice(1);
+    firstColumn = getVerticalSlice(0);
 
     for(Particle p: firstColumn){
         p.lock();
@@ -222,11 +236,14 @@ void draw(){
         // p.display();
     }
 
-    for(ArrayList<Particle> plist: grid){
-        for(Particle p: plist){
-            p.display(255, 0, 0);
-        }
+    if(DRAWGRID){
+        for(ArrayList<Particle> plist: grid){
+            for(Particle p: plist){
+                p.display(255, 0, 0);
+            }
+        }    
     }
+    
 
 }
 
