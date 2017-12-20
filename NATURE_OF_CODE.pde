@@ -56,22 +56,22 @@ ArrayList<VerletSpring2D> springs;
 
 ArrayList<ArrayList<Particle>> grid;
 
-int sizeX = 60;
-int sizeY = 20;
+int sizeX = 120;
+int sizeY = 30;
 
 
 int total = 10;
 int startX = 400;
 int startY = 50;
 
-int spacingX = 5;
+int spacingX = 3;
 int spacingY = 30;
 
 float gb = 0;
 float colorStep;
 int colorFadeDuration = 1;
 
-float strength = 1.2;
+float strength = 1.7;
 
 PImage img;
 
