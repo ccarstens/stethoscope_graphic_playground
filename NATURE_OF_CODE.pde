@@ -61,6 +61,10 @@ int startY = 50;
 
 int spacing = 10;
 
+float gb = 0;
+float colorStep;
+int colorFadeDuration = 1;
+
 void setup(){
 
     background(255);
@@ -73,9 +77,12 @@ void setup(){
 
     physics = new VerletPhysics2D();
     physics.setWorldBounds(new Rect(0, 0, width, height));
-    physics.addBehavior(new GravityBehavior2D(new Vec2D(0, 0.01)));
+    physics.addBehavior(new GravityBehavior2D(new Vec2D(-5, 0)));
 
     wind = new ConstantForceBehavior2D(new Vec2D(-0.1, 0));
+
+
+    colorStep = 255 / (frameRate * colorFadeDuration);
 
     // physics.addBehavior(wind);
     int x = startX;
@@ -97,7 +104,7 @@ void setup(){
         x += spacing;
     }
 
-    particles.get(1).lock();
+    // particles.get(1).lock();
 }
 
 
@@ -108,7 +115,8 @@ void draw(){
     physics.update();
     bindLast();
     noFill();
-    stroke(255);
+    stroke(255, gb, gb);
+    
     strokeWeight(70);
     strokeCap(SQUARE);
     beginShape();
@@ -120,6 +128,14 @@ void draw(){
     for(Particle p: particles){
         // p.display();
     }
+
+
+    if(gb > 255 || gb < 0){
+        colorStep *= -1;
+    }
+
+    // gb += colorStep;
+    println(gb);
 
     
 
