@@ -155,7 +155,7 @@ void setup(){
         // p.lock();
     }
 
-    firstColumn = getVerticalSlice(0);
+    firstColumn = getVerticalSlice(1);
 
     for(Particle p: firstColumn){
         p.lock();
@@ -224,7 +224,7 @@ void draw(){
 
     for(ArrayList<Particle> plist: grid){
         for(Particle p: plist){
-            // p.display(255, 0, 0);
+            p.display(255, 0, 0);
         }
     }
 
