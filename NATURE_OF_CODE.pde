@@ -149,7 +149,7 @@ void setup(){
     corners.add(grid.get(sizeY - 1).get(0));
     corners.add(grid.get(sizeY - 1).get(sizeX - 1));
     for(Particle p: corners){
-        // p.lock();
+        p.lock();
     }
     
 }
@@ -214,7 +214,7 @@ void draw(){
     for(Particle p: corners){
         noStroke();
         fill(255);
-        // p.display();
+        p.display();
     }
 
 }
