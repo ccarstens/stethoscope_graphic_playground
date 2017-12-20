@@ -56,7 +56,7 @@ ArrayList<VerletSpring2D> springs;
 
 ArrayList<ArrayList<Particle>> grid;
 
-int sizeX = 120;
+int sizeX = 60;
 int sizeY = 30;
 
 
@@ -64,14 +64,14 @@ int total = 10;
 int startX = 400;
 int startY = 50;
 
-int spacingX = 2;
+int spacingX = 8;
 int spacingY = 25;
 
 float gb = 0;
 float colorStep;
 int colorFadeDuration = 1;
 
-float maxSpringStrengthX = 1.7;
+float maxSpringStrengthX = 1.9;
 float maxSpringStrengthY = 1.7;
 
 PImage img;
@@ -80,11 +80,11 @@ float imgWidthStep, imgHeightStep;
 
 
 float windMax = 3;
-float windMin = 0.5;
+float windMin = 0.1;
 float windStrength;
 
-float maxWeight = 10;
-float minWeight = 1;
+float maxWeight = 3;
+float minWeight = 2;
 
 ArrayList<Particle> corners;
 
