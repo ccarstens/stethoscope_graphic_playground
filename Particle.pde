@@ -5,7 +5,7 @@ class Particle extends VerletParticle2D{
     }
 
     void display(){
-        fill(255);
+        fill(0);
         noStroke();
 
         ellipse(x, y, 6, 6);

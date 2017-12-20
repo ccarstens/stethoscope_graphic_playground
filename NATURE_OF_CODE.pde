@@ -73,7 +73,7 @@ void setup(){
 
     physics = new VerletPhysics2D();
     physics.setWorldBounds(new Rect(0, 0, width, height));
-    physics.addBehavior(new GravityBehavior2D(new Vec2D(0, 0.1)));
+    physics.addBehavior(new GravityBehavior2D(new Vec2D(0, 0.01)));
 
     wind = new ConstantForceBehavior2D(new Vec2D(-0.1, 0));
 
@@ -141,4 +141,12 @@ void mouseMoved(){
     wind.setForce(new Vec2D(x, y));
 
 
+}
+
+void mousePressed(){
+    Particle p = particles.get(1);
+    // p.unlock();
+    p.x = mouseX;
+    p.y = mouseY;
+    // p.lock();
 }
