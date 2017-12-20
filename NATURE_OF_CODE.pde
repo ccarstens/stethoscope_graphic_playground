@@ -70,11 +70,17 @@ float gb = 0;
 float colorStep;
 int colorFadeDuration = 1;
 
-float strength = 0.1;
+float strength = 0.6;
 
 PImage img;
 
 float imgWidthStep, imgHeightStep;
+
+
+float windMax = 1;
+float windStrength;
+
+ArrayList<Particle> corners;
 
 void setup(){
 
@@ -90,12 +96,12 @@ void setup(){
     physics.setWorldBounds(new Rect(0, 0, width, height));
     physics.addBehavior(new GravityBehavior2D(new Vec2D(0, 1)));
 
-    wind = new ConstantForceBehavior2D(new Vec2D(-0.1, 0.1));
+    wind = new ConstantForceBehavior2D(new Vec2D(0, 0));
 
 
     
 
-    // physics.addBehavior(wind);
+    physics.addBehavior(wind);
     int x = startX;
     int y = startY;
 
@@ -137,23 +143,23 @@ void setup(){
     imgWidthStep = img.width / sizeX;
     imgHeightStep = img.height / sizeY;
 
+    corners = new ArrayList<Particle>();
+    corners.add(grid.get(0).get(0));
+    corners.add(grid.get(0).get(grid.get(0).size() - 1));
+    corners.add(grid.get(sizeY - 1).get(0));
+    corners.add(grid.get(sizeY - 1).get(sizeX - 1));
+    for(Particle p: corners){
+        // p.lock();
+    }
     
 }
 
-void setTopRight(int x, int y){
-
-    Particle bottomLeft = grid.get(sizeY - 1).get(0);
-    Particle bottomRight = grid.get(sizeY - 1).get(sizeX - 1);
-    bottomLeft.lock();
-    bottomRight.lock();
-
-
-    Particle topRight = grid.get(0).get(sizeX - 1);
-    topRight.x = x;
-    topRight.y = y;
-
-    bottomLeft.unlock();
-    bottomRight.unlock();
+void setCorner(Particle p, int x, int y){
+    // boolean locked = p.isLocked();
+    // if(! locked) p.lock();
+    p.x = x;
+    p.y = y;
+    // if(!locked) p.unlock();
 }
 
 
@@ -180,7 +186,7 @@ void draw(){
     // stroke(255);
     noStroke();
     noFill();
-
+    smooth();
     beginShape();
     texture(img);
 
@@ -205,11 +211,43 @@ void draw(){
 
     endShape(CLOSE);
 
-    
+    for(Particle p: corners){
+        noStroke();
+        fill(255);
+        // p.display();
+    }
 
 }
 
 void mousePressed(){
-    setTopRight(mouseX, mouseY);
+    setCorner(getClosest(), mouseX, mouseY);
 }
 
+
+void mouseMoved(){
+    windStrength = map(mouseY, height, 0, 0, windMax);
+    if(mouseX > width / 2){
+        windStrength *= -1;
+    }
+
+    wind.setForce(new Vec2D(windStrength, 0));
+
+}
+
+Particle getClosest(){
+    int smallest = 0;
+    float smallestValue = 999;
+    Vec2D mouse = new Vec2D(mouseX, mouseY);
+    int i = 0;
+    for(Particle p: corners){
+        float dist = p.distanceTo(mouse);
+        if(dist < smallestValue){
+            smallestValue = dist;
+
+            smallest = i;
+
+        }
+        i++;
+    }
+    return corners.get(smallest);
+}
