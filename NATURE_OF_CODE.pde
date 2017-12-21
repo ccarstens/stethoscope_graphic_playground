@@ -159,7 +159,7 @@ void setup(){
     
 
 
-    img = loadImage("skinpatch.png");
+    img = loadImage("skinpatch_top.png");
 
     imgWidthStep = img.width / sizeX;
     imgHeightStep = img.height / sizeY;
@@ -180,9 +180,9 @@ void setup(){
     // }
 
     fixing = getGridPartial(0, 20, 0, 5);
-    ArrayList<Particle> bottom = getGridPartial(0, 20, 25, 5);
+    ArrayList<Particle> bottom = getGridPartial(0, 20, 28, 2);
     for(Particle p: bottom){
-        p.x += 250;
+        p.x += 150;
     }
     fixing.addAll(bottom);
 
@@ -202,6 +202,10 @@ void setCorner(Particle p, int x, int y){
 
 
 void draw(){
+
+
+    wind.setForce(new Vec2D(random(windMin, windMax), 0));
+
     background(0);
     // dropLine();
     
@@ -268,12 +272,12 @@ void mousePressed(){
 
 
 void mouseMoved(){
-    windStrength = map(mouseY, height, 0, windMin, windMax);
+    // windStrength = map(mouseY, height, 0, windMin, windMax);
     // if(mouseX > width / 2){
     //     windStrength *= -1;
     // }
     // println(windStrength);
-    wind.setForce(new Vec2D(windStrength, 0));
+    // wind.setForce(new Vec2D(windStrength, 0));
 
 }
 
