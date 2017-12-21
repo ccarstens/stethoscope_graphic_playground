@@ -72,7 +72,7 @@ float colorStep;
 int colorFadeDuration = 1;
 
 float maxSpringStrengthX = 1.9;
-float maxSpringStrengthY = 1.7;
+float maxSpringStrengthY = 0.9;
 
 float minSpringStrengthX = 0.5;
 
@@ -81,8 +81,8 @@ PImage img;
 float imgWidthStep, imgHeightStep;
 
 
-float windMax = 6;
-float windMin = 0.9;
+float windMax = 2;
+float windMin = 0.2;
 float windStrength;
 
 float maxWeight = 3;
@@ -90,7 +90,7 @@ float minWeight = 1;
 
 ArrayList<Particle> corners;
 
-ArrayList<Particle> firstColumn;
+ArrayList<Particle> firstColumn, fixing;
 
 boolean DRAWGRID = false;
 
@@ -175,7 +175,18 @@ void setup(){
 
     firstColumn = getVerticalSlice(0);
 
-    for(Particle p: firstColumn){
+    // for(Particle p: firstColumn){
+    //     p.lock();
+    // }
+
+    fixing = getGridPartial(0, 20, 0, 5);
+    ArrayList<Particle> bottom = getGridPartial(0, 20, 25, 5);
+    for(Particle p: bottom){
+        p.x += 250;
+    }
+    fixing.addAll(bottom);
+
+    for(Particle p: fixing){
         p.lock();
     }
     
@@ -290,4 +301,15 @@ ArrayList<Particle> getVerticalSlice(int i){
         list.add(pl.get(i));
     }
     return list;
+}
+
+
+ArrayList<Particle> getGridPartial(int xStart, int xLen, int yStart, int yLen){
+    ArrayList<Particle> tmp = new ArrayList<Particle>();
+    for(int iy = yStart; iy < yStart + yLen; iy++){
+        for(int ix = xStart; ix < xStart + xLen; ix++){
+            tmp.add(grid.get(iy).get(ix));
+        }
+    }
+    return tmp;
 }
