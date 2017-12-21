@@ -74,17 +74,19 @@ int colorFadeDuration = 1;
 float maxSpringStrengthX = 1.9;
 float maxSpringStrengthY = 1.7;
 
+float minSpringStrengthX = 0.5;
+
 PImage img;
 
 float imgWidthStep, imgHeightStep;
 
 
-float windMax = 3;
-float windMin = 0.1;
+float windMax = 6;
+float windMin = 0.9;
 float windStrength;
 
 float maxWeight = 3;
-float minWeight = 2;
+float minWeight = 1;
 
 ArrayList<Particle> corners;
 
@@ -119,7 +121,8 @@ void setup(){
         ArrayList<Particle> tmpList = new ArrayList<Particle>();
         x = startX;
 
-        float strenghStep = maxSpringStrengthX / sizeX / 4;
+        float strenghStep = maxSpringStrengthX / sizeX / 1;
+
         float strength = maxSpringStrengthX;
 
         for(int ii = 0; ii < sizeX; ii++){
@@ -143,6 +146,7 @@ void setup(){
                 springs.add(tmpSpring);
                 physics.addSpring(tmpSpring);
                 strength -= strenghStep;
+                if(strength < minSpringStrengthX) strength = minSpringStrengthX;
 
             }
         }
@@ -155,7 +159,7 @@ void setup(){
     
 
 
-    img = loadImage("receipt.png");
+    img = loadImage("skinpatch.png");
 
     imgWidthStep = img.width / sizeX;
     imgHeightStep = img.height / sizeY;
@@ -254,10 +258,10 @@ void mousePressed(){
 
 void mouseMoved(){
     windStrength = map(mouseY, height, 0, windMin, windMax);
-    if(mouseX > width / 2){
-        windStrength *= -1;
-    }
-
+    // if(mouseX > width / 2){
+    //     windStrength *= -1;
+    // }
+    // println(windStrength);
     wind.setForce(new Vec2D(windStrength, 0));
 
 }
