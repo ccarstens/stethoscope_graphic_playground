@@ -157,8 +157,11 @@ void bindLast(){
     Particle p = particles.get(particles.size() - 2);
     p.lock();
     p.x = 1300;
-    float[] sampleAverage = stethoscopeController.getAudioMappedTo(800, 1);
-    p.y = sampleAverage[0];
+    float[] sampleAverage = stethoscopeController.getAudioMappedTo(1600, 1);
+    if(!Float.isNaN(sampleAverage[0])){
+        p.y = sampleAverage[0];    
+    }
+    
     p.unlock();
 }
 

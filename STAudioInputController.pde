@@ -32,11 +32,16 @@ class STAudioInputController extends SettingsReceiver{
 
     public float getBufferPartialAverage(float[] bufferPartial){
         float tmp = 0.0;
+        int samplecount = 0;
         for(float sample: bufferPartial){
-            if(sample < 0) sample *= -1;
-            tmp += sample;
+            // if(sample < 0) sample *= -1;
+            if(sample > 0){
+                tmp += sample;
+                samplecount++;
+            }
+            
         }
-        return tmp / bufferPartial.length;
+        return tmp / samplecount;
     }
 
     public float[] getAudioMappedTo(float max, int resolution){
