@@ -55,6 +55,14 @@ ArrayList<VerletSpring2D> springs;
 
 
 
+
+
+Settings def = new Settings(this);
+STAudioInputController stethoscopeController;
+
+
+
+
 int total = 10;
 int startX = 50;
 int startY = 50;
@@ -105,6 +113,10 @@ void setup(){
     }
 
     // particles.get(1).lock();
+
+
+    stethoscopeController = new STAudioInputController(def);
+
 }
 
 
@@ -144,8 +156,9 @@ void draw(){
 void bindLast(){
     Particle p = particles.get(particles.size() - 2);
     p.lock();
-    p.x = mouseX;
-    p.y = mouseY;
+    p.x = 1300;
+    float[] sampleAverage = stethoscopeController.getAudioMappedTo(800, 1);
+    p.y = sampleAverage[0];
     p.unlock();
 }
 
