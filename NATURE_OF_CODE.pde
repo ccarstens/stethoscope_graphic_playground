@@ -74,7 +74,7 @@ float colorStep;
 int colorFadeDuration = 1;
 
 void setup(){
-
+    // fullScreen();
     background(255);
     size(1500, 1000, P2D);
     frameRate(30);
@@ -157,7 +157,7 @@ void bindLast(){
     Particle p = particles.get(particles.size() - 2);
     p.lock();
     p.x = 1300;
-    float[] sampleAverage = stethoscopeController.getAudioMappedTo(1600, 1);
+    float[] sampleAverage = stethoscopeController.getAudioMappedTo(2000, 1);
     if(!Float.isNaN(sampleAverage[0])){
         p.y = sampleAverage[0];    
     }
